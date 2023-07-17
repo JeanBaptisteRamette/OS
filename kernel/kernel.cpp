@@ -1,25 +1,8 @@
-#include <cstddef>
-#include "limine.h"
+#include <arch/x86_64/cpu.hpp>
+#include <limine.h>
+#include <serial.hpp>
+#include <std/printf.hpp>
 
-
-static volatile limine_framebuffer_request framebuffer_request = {
-        .id = LIMINE_FRAMEBUFFER_REQUEST,
-        .revision = 0,
-};
-
-
-
-[[noreturn]]
-static void KeHalt()
-{
-    //
-    // hlt instructions halts until next interrupts so clear interrupts
-    //
-    asm ("cli");
-
-    while (true)
-        asm ("hlt");
-}
 
 extern "C"
 void KernelEntry()
@@ -28,28 +11,15 @@ void KernelEntry()
     // Kernel Entry Point
     //
 
-    if (framebuffer_request.response == nullptr || framebuffer_request.response->framebuffer_count < 1)
+
+    //
+    // Init serial communication for logging to host machine
+    //
+    if (!SerialComInit())
         KeHalt();
 
-    limine_framebuffer *framebuffer = framebuffer_request.response->framebuffers[0];
-
-    if (!framebuffer)
-        KeHalt();
-
-    auto FrameHeight = framebuffer->height;
-    auto FrameWidth  = framebuffer->width;
-    auto FrameStart  = reinterpret_cast<uint32_t*>(framebuffer->address);
-
-    for (size_t x = 0; x < FrameWidth; ++x)
-    {
-        for (size_t y = 0; y < FrameHeight; ++y)
-        {
-            if ((x + y) & 1)
-                FrameStart[x * (framebuffer->pitch / 4) + y] = 0xFFFFFF;
-            else
-                FrameStart[x * (framebuffer->pitch / 4) + y] = 0x000000;
-        }
-    }
+    printf("XXXXX 0x%X XXXXX\n", 0xDEAD);
+    printf("XXXXX 0x%X XXXXX\n", 0xBEEF);
 
     KeHalt();
 }

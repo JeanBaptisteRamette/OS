@@ -1,5 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "modernize-use-auto"
 #ifndef OS_REQUIRED_HPP
 #define OS_REQUIRED_HPP
 
@@ -64,5 +62,3 @@ int memcmp(const void *s1, const void *s2, size_t n)
 
 
 #endif //OS_REQUIRED_HPP
-
-#pragma clang diagnostic pop

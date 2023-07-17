@@ -57,7 +57,9 @@ override CFLAGS += \
     -mno-mmx \
     -mno-sse \
     -mno-sse2 \
-    -mno-red-zone
+    -mno-red-zone \
+    -DPRINTF_DISABLE_SUPPORT_FLOAT       \
+    -DPRINTF_DISABLE_SUPPORT_EXPONENTIAL
 
 # Internal C preprocessor flags that should not be changed by the user.
 override CPPFLAGS := \
