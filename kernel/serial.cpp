@@ -55,7 +55,7 @@ bool SerialComInit()
     return true;
 }
 
-bool SerialComDataReady()
+static bool SerialComDataReady()
 {
     //
     // Checks if DR flag (Data Ready) of the LSR is set indicating a data byte is received and stored in the receive buffer or the FIFO.
@@ -76,7 +76,7 @@ BYTE SerialComRead()
     }
 }
 
-bool SerialComTxQueueEmpty()
+static bool SerialComTxQueueEmpty()
 {
     //
     // Checks wether the THR is empty, meaning that the UART is ready

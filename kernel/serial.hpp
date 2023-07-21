@@ -65,7 +65,4 @@ bool SerialComInit();
 BYTE SerialComRead();
 void SerialComWrite(BYTE Data);
 
-static bool SerialComDataReady();
-static bool SerialComTxQueueEmpty();
-
 #endif //OS_SERIAL_HPP

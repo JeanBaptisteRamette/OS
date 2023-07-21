@@ -19,4 +19,6 @@ typedef uint64_t QWORD, *PQWORD, *LPQWORD;
 #define LOWORD(l) ((WORD)((QWORD)(l) & 0xFFFF))
 #define HIWORD(l) ((WORD)((QWORD)(l) >> 16))
 
+#define PACKED __attribute__((packed))
+
 #endif //OS_MINDEF_HPP

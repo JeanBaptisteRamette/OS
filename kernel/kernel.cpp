@@ -1,7 +1,8 @@
-#include <arch/x86_64/cpu.hpp>
 #include <limine.h>
 #include <serial.hpp>
 #include <std/printf.hpp>
+#include <arch/x86_64/cpu.hpp>
+#include <arch/x86_64/gdt.hpp>
 
 
 extern "C"
@@ -18,8 +19,9 @@ void KernelEntry()
     if (!SerialComInit())
         KeHalt();
 
-    printf("XXXXX 0x%X XXXXX\n", 0xDEAD);
-    printf("XXXXX 0x%X XXXXX\n", 0xBEEF);
+    KeGdtLoad();
+
+    printf("Loaded Global Descriptor Table !\n");
 
     KeHalt();
 }
