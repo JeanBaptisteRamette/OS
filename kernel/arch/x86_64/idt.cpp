@@ -15,13 +15,9 @@ GATE_DESCRIPTOR IdtEncodeDescriptor(QWORD IsrOffset, BYTE Attributes)
 {
     GATE_DESCRIPTOR desc {};
 
-    // desc.LoIsrOffset = LOWORD(IsrOffset);
-    // desc.MiIsrOffset = HIWORD(LODWORD(IsrOffset));
-    // desc.HiIsrOffset = HIDWORD(IsrOffset);
-
-    desc.LoIsrOffset = IsrOffset & 0xFFFF;
-    desc.MiIsrOffset = (IsrOffset >> 16) & 0xFFFF;
-    desc.HiIsrOffset = (IsrOffset >> 32) & 0xFFFFFFFF;
+    desc.LoIsrOffset = LOWORD(IsrOffset);
+    desc.MiIsrOffset = HIWORD(LODWORD(IsrOffset));
+    desc.HiIsrOffset = HIDWORD(IsrOffset);
 
     desc.SegmentSelector = SELECTOR_KCS;
     desc.Attributes = Attributes;
