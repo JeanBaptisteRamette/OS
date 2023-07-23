@@ -4,13 +4,13 @@
 
 
 
-#define LONGMODE (1 << 9)
-#define PRESENT  (1 << 7)
-#define DPL0     (0)
-#define CODE     (1 << 4)
-#define DATA     (1 << 4)
+#define LONGMODE     (1 << 9)
+#define PRESENT      (1 << 7)
+#define DPL0         (0)
+#define CODE         (1 << 4)
+#define DATA         (1 << 4)
 #define EXECUTE_READ (0b1010)
-#define READ_WRITE (0b0010)
+#define READ_WRITE   (0b0010)
 
 
 //
@@ -23,37 +23,7 @@ extern "C" void KeGdtInstallStub(
     );
 
 
-void KeGdtLoad()
-{
-    //
-    // Create the default GDT
-    //
-    const auto Descriptors = KeGdtSetup();
-
-
-    //
-    // Create a GDT register
-    //
-    const auto Limit = Descriptors.size() * sizeof(SEGMENT_DESCRIPTOR) - 1;
-    const auto Address = (QWORD)Descriptors.data();
-
-    const GDT_REGISTER GdtRegister = {
-        Limit,
-        Address
-    };
-
-
-    // We should make sure to clear interrupts before loading our GDT
-    // (In our case Limine's protocol specifies the interrupt flag is cleared on kernel entry)
-    if (KeInterruptsEnabled())
-        KeClearInterrupts();
-
-
-    //
-    // Call the assembly stub responsible for loading the GDT
-    //
-    KeGdtInstallStub(&GdtRegister, SELECTOR_KCS, SELECTOR_KDS);
-}
+static osl::array<SEGMENT_DESCRIPTOR, 3> Descriptors {};
 
 
 SEGMENT_DESCRIPTOR GdtEncodeDescriptor(DWORD Base, DWORD Limit, WORD Flags)
@@ -76,12 +46,10 @@ SEGMENT_DESCRIPTOR GdtEncodeDescriptor(DWORD Base, DWORD Limit, WORD Flags)
 }
 
 
-osl::array<SEGMENT_DESCRIPTOR, 3> KeGdtSetup()
+void KeGdtSetup()
 {
     // In long mode, the CPU ignores the entries' base and limit as it
     // uses a flat memory-model but it still uses the access flags
-
-    osl::array<SEGMENT_DESCRIPTOR, 3> Descriptors {};
 
     //
     // The first segment descriptor is not used by the processor and should be null
@@ -93,22 +61,48 @@ osl::array<SEGMENT_DESCRIPTOR, 3> KeGdtSetup()
     // Defines a 64-bit code segment for the kernel
     //
     Descriptors[SEG_K64C] = GdtEncodeDescriptor(
-                                0x00'00'00'00,      // Ignored base
-                                0x00'00'00'00,      // Ignored limit
-                                PRESENT | DPL0 | CODE | EXECUTE_READ | LONGMODE
-                            );
+            0x00'00'00'00,      // Ignored base
+            0x00'00'00'00,      // Ignored limit
+            PRESENT | DPL0 | CODE | EXECUTE_READ | LONGMODE
+    );
 
     //
     // Defines a 64-bit data segment for the kernel
     //
     Descriptors[SEG_K64D] = GdtEncodeDescriptor(
-                                0x00'00'00'00,      // Ignored base
-                                0x00'00'00'00,      // Ignored limit
-                                PRESENT | DPL0 | DATA | READ_WRITE
-                            );
-
-    return Descriptors;
+            0x00'00'00'00,      // Ignored base
+            0x00'00'00'00,      // Ignored limit
+            PRESENT | DPL0 | DATA | READ_WRITE
+    );
 }
+
+
+void KeGdtLoad()
+{
+    //
+    // Create the default GDT
+    //
+    KeGdtSetup();
+
+
+    //
+    // Create a GDT register
+    //
+    const auto Limit   = Descriptors.size() * sizeof(SEGMENT_DESCRIPTOR) - 1;
+    const auto Address = (QWORD)Descriptors.data();
+
+    const GDT_REGISTER GdtRegister = {
+        Limit,
+        Address
+    };
+
+    //
+    // Call the assembly stub responsible for loading the GDT and updating segment selectors
+    //
+    KeGdtInstallStub(&GdtRegister, SELECTOR_KCS, SELECTOR_KDS);
+}
+
+
 
 
 

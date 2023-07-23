@@ -7,6 +7,8 @@ void KeSetInterrupts();
 bool KeInterruptsEnabled();
 
 [[noreturn]]
+void KeHaltForever();
 void KeHalt();
+
 
 #endif //OS_CPU_HPP

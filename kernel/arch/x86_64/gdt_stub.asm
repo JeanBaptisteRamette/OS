@@ -19,8 +19,10 @@ KeGdtInstallStub:
     ; Update data segment selectors to
     ; index the new descriptors
     mov ds, dx
-    mov es, dx
     mov ss, dx
+    mov es, dx
+    mov fs, dx
+    mov gs, dx
 
     ; Update code segment selector, we need to issue a far return:
     ; "A return to a calling procedure located in a different segment

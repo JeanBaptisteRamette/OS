@@ -4,6 +4,9 @@
 
 void KeClearInterrupts()
 {
+    //
+    // Does not affect non-maskable interrupts (NMIs)
+    //
     asm volatile ("cli");
 }
 
@@ -16,17 +19,28 @@ bool KeInterruptsEnabled()
 {
     QWORD Flags = 0;
 
+    //
+    // pop RFLAGS into variable
+    //
     asm volatile (
             "pushf\n"
             "pop %0"
             : "=r" (Flags) : : "memory"       // Clobber list: indicates that inline assembly modifies memory
             );
 
+    //
+    // Checks if IF (Interrupt Flag - bit 9) of RFLAGS is set
+    //
     return Flags & 0x200;
 }
 
-[[noreturn]]
 void KeHalt()
+{
+    asm volatile ("hlt");
+}
+
+[[noreturn]]
+void KeHaltForever()
 {
     //
     // hlt instructions halts until next interrupts so
@@ -35,5 +49,5 @@ void KeHalt()
     KeClearInterrupts();
 
     while (true)
-        asm volatile ("hlt");
+        KeHalt();
 }

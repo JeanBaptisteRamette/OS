@@ -23,7 +23,7 @@ struct SEGMENT_DESCRIPTOR
 struct GDT_REGISTER
 {
     WORD  Limit;                 // Offset of the last byte in the GDT
-    QWORD Address;               // Pointer to the first byte of the GDT
+    QWORD BaseAddress;           // Pointer to the first byte of the GDT
 } PACKED;
 
 
@@ -35,8 +35,6 @@ constexpr WORD SELECTOR_KCS = SEG_K64C * 8;    // 0x8
 constexpr WORD SELECTOR_KDS = SEG_K64D * 8;    // 0x10
 
 void KeGdtLoad();
-
-osl::array<SEGMENT_DESCRIPTOR, 3> KeGdtSetup();
 
 
 #endif //OS_GDT_HPP
