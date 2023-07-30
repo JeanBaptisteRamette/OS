@@ -1,16 +1,19 @@
-#ifndef OS_STRING_VIEW_HPP
-#define OS_STRING_VIEW_HPP
-
+#ifndef OS_SPAN_HPP
+#define OS_SPAN_HPP
 
 #include <cstddef>
-#include <std/algorithm.hpp>
 
+//
+// a span is an array view, much like a string view
+//
 
 namespace osl
 {
-    class string_view
+    template<typename T>
+    class span
     {
-        using value_type = char;
+    public:
+        using value_type = T;
         using size_type = size_t;
 
         // only const because it's a view
@@ -18,12 +21,11 @@ namespace osl
         using const_iterator = const_pointer;
 
     public:
-        constexpr string_view() : data_(nullptr), size_(0) {}
-        constexpr string_view(const_pointer str) :  data_(str), size_(osl::strlen(str)) {}
-        constexpr string_view(const_pointer str, size_type length) : data_(str), size_(length) {}
+        constexpr span() : data_(nullptr), size_(0) {}
+        constexpr span(const_pointer ptr, size_type length) : data_(ptr), size_(length) {}
 
-        constexpr string_view(const string_view& other) noexcept = default;
-        constexpr string_view(string_view&& other) noexcept = default;
+        constexpr span(const span& other) noexcept = default;
+        constexpr span(span&& other) noexcept = default;
 
         [[nodiscard]] constexpr const_iterator  begin() const noexcept { return data_; }
         [[nodiscard]] constexpr const_iterator cbegin() const noexcept { return data_; }
@@ -43,4 +45,4 @@ namespace osl
     };
 }
 
-#endif //OS_STRING_VIEW_HPP
+#endif //OS_SPAN_HPP

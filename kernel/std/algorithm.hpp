@@ -3,6 +3,7 @@
 
 
 #include <cstddef>
+#include <std/mindef.hpp>
 
 
 namespace osl
@@ -17,5 +18,6 @@ namespace osl
     }
 }
 
+LPVOID ZeroMemory(LPVOID Buffer, QWORD Length);
 
 #endif //OS_ALGORITHM_HPP

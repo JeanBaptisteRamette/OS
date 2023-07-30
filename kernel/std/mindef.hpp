@@ -12,6 +12,9 @@ typedef uint16_t WORD,  *PWORD,  *LPWORD;
 typedef uint32_t DWORD, *PDWORD, *LPDWORD;
 typedef uint64_t QWORD, *PQWORD, *LPQWORD;
 
+typedef       char* PSTR;
+typedef const char* PCSTR;
+
 
 #define LOBYTE(w) ((BYTE)((QWORD)(w) & 0xFF))
 #define HIBYTE(w) ((BYTE)((QWORD)(w) >> 8))
@@ -22,6 +25,11 @@ typedef uint64_t QWORD, *PQWORD, *LPQWORD;
 #define LODWORD(l) ((DWORD)((QWORD)(l) & 0xFFFFFFFF))
 #define HIDWORD(l) ((DWORD)((QWORD)(l) >> 32))
 
+#define GiB(Bytes) ((Bytes) / 0x40000000)
+#define MiB(Bytes) ((Bytes) / 0x100000)
+#define KiB(Bytes) ((Bytes) / 0x400)
+
 #define PACKED __attribute__((packed))
+
 
 #endif //OS_MINDEF_HPP

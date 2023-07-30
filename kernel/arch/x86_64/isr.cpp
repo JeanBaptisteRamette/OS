@@ -2,9 +2,11 @@
 #include <std/printf.hpp>
 
 
+#define IRQ(IntNo) (IntNo - CPU_EXCEPTION_COUNT)
+
 bool InterruptIsCpuException(QWORD InterruptVector)
 {
-    return InterruptVector < 32;
+    return InterruptVector < CPU_EXCEPTION_COUNT;
 }
 
 void DbgLogCpuException(const INTERRUPT_CONTEXT* Exception)
@@ -16,17 +18,17 @@ void DbgLogCpuException(const INTERRUPT_CONTEXT* Exception)
     const auto ExceptionErrCode     = Exception->InterruptErrCode;
     const auto ExceptionDescription = ExceptionsDescriptions[ExceptionVector].data();
 
-    printf("Received CPU Exception: Vector (%X)\n", ExceptionVector);
+    printf("Received CPU Exception: Vector (%lX)\n", ExceptionVector);
     printf("Exception Description:  %s\n", ExceptionDescription);
 
     const auto& c = *Exception;
 
     printf(
            "Exception Context Dump:\n"
-           "RAX %016X RBX %016X RCX %016X RDX %016X\n"
-           "RSI %016X RDI %016X RBP %016X R8  %016X\n"
-           "R9  %016X R10 %016X R11 %016X R12 %016X\n"
-           "R13 %016X R14 %016X R15 %016X ERR %016X\n",
+           "RAX %016lX RBX %016lX RCX %016lX RDX %016lX\n"
+           "RSI %016lX RDI %016lX RBP %016lX R8  %016lX\n"
+           "R9  %016lX R10 %016lX R11 %016lX R12 %016lX\n"
+           "R13 %016lX R14 %016lX R15 %016lX ERR %016lX\n",
            c.rax, c.rbx, c.rcx, c.rdx,
            c.rsi, c.rdi, c.rbp, c.r8,
            c.r9,  c.r10, c.r11, c.r12,
@@ -43,5 +45,5 @@ void InterruptServiceRoutineDispatcher(const INTERRUPT_CONTEXT* InterruptContext
     if (InterruptIsCpuException(InterruptContext->InterruptVector))
         DbgLogCpuException(InterruptContext);
     else
-        printf("ISR Dispatcher (%d)\n", InterruptContext->InterruptVector);
+        printf("IRQ Received (%lu) -> (%lu)\n", InterruptContext->InterruptVector, IRQ(InterruptContext->InterruptVector));
 }

@@ -3,6 +3,9 @@
 #include <arch/x86_64/cpu.hpp>
 #include <arch/x86_64/gdt.hpp>
 #include <arch/x86_64/idt.hpp>
+#include <arch/x86_64/pic.hpp>
+#include <mm/memorymap.hpp>
+#include <mm/pmm.hpp>
 
 
 extern "C"
@@ -11,7 +14,6 @@ extern "C"
     //
     // Kernel Entry Point
     //
-
 
     //
     // Init serial communication for logging to host machine
@@ -30,11 +32,19 @@ extern "C"
     printf("Loaded GDT !\n");
     printf("Loaded IDT !\n");
 
-    printf("Triggering processor exception 6\n");
+    //
+    // The PIC is a legacy and obsolete controller which IRQs overlap CPU exceptions
+    //
+    KePicRemapIRQs();
+    KePicDisable();
 
-    asm __volatile__ ("int $6");
+    DbgDisplayMemoryMap();
 
-    printf("Interrupt 6 handled\n");
+    KePmmInit();
+
+    const QWORD Page = KePmmRequest(1);
+
+    printf("Allocated physical memory: %lX\n", Page);
 
     KeHaltForever();
 }

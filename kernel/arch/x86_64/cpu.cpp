@@ -42,12 +42,6 @@ void KeHalt()
 [[noreturn]]
 void KeHaltForever()
 {
-    //
-    // hlt instructions halts until next interrupts so
-    // clear interrupts because we want to halt forever
-    //
-    KeClearInterrupts();
-
     while (true)
         KeHalt();
 }
