@@ -1,7 +1,7 @@
 #include <serial.hpp>
 
 
-bool SerialComInit()
+KSTATUS SerialComInit()
 {
     //
     // Disable interrupts
@@ -45,14 +45,14 @@ bool SerialComInit()
     // Checks the UART echoes it properly
     //
     if (HalIoRecvByte(RBR) != 0xAE)
-        return false;
+        return KFAIL;
 
     //
     // Remove loopback mode, OUT1, OUT2, RTS, DTR set
     //
     HalIoSendByte(MCR, 0x0F);
 
-    return true;
+    return KSUCCESS;
 }
 
 static bool SerialComDataReady()

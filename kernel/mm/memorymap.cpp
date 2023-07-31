@@ -78,7 +78,7 @@ void DbgDisplayMemoryMap()
     printf("Total Usable: %lu MiB\n", MiB(TotalUsable));
 }
 
-QWORD KeGetMemoryMapInfo(KMEMORY_MAP_INFO& Info)
+KSTATUS KeGetMemoryMapInfo(KMEMORY_MAP_INFO& Info)
 {
     QWORD UsableEntryCount = 0;
     QWORD TotalAvailable   = 0;
@@ -86,7 +86,7 @@ QWORD KeGetMemoryMapInfo(KMEMORY_MAP_INFO& Info)
     const auto MemoryMap = KeGetMemoryMap();
 
     if (!MemoryMap)
-        return 0;
+        return KFAIL;
 
     const osl::span<limine_memmap_entry*> MapView(MemoryMap->entries, MemoryMap->entry_count);
 
@@ -102,5 +102,5 @@ QWORD KeGetMemoryMapInfo(KMEMORY_MAP_INFO& Info)
     Info.UsableEntries  = UsableEntryCount;
     Info.TotalAvailable = TotalAvailable;
 
-    return 1;
+    return KSUCCESS;
 }

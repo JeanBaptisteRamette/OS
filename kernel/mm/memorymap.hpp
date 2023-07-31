@@ -13,6 +13,6 @@ struct KMEMORY_MAP_INFO
 
 limine_memmap_response* KeGetMemoryMap();
 void DbgDisplayMemoryMap();
-QWORD KeGetMemoryMapInfo(KMEMORY_MAP_INFO& Info);
+KSTATUS KeGetMemoryMapInfo(KMEMORY_MAP_INFO& Info);
 
 #endif //OS_MEMORYMAP_HPP

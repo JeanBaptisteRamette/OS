@@ -61,7 +61,7 @@ namespace
 
 }
 
-bool SerialComInit();
+KSTATUS SerialComInit();
 BYTE SerialComRead();
 void SerialComWrite(BYTE Data);
 

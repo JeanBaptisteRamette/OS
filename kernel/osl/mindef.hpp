@@ -5,6 +5,13 @@
 #include <cstdint>
 
 
+enum KSTATUS
+{
+    KFAIL    = 0,
+    KSUCCESS = 1
+};
+
+
 typedef       void* LPVOID;
 typedef const void* LPCVOID;
 typedef uint8_t  BYTE,  *PBYTE,  *LPBYTE;
