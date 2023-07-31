@@ -1,8 +1,8 @@
 #include <allocators/localbm.hpp>
 #include <mm/memorymap.hpp>
-#include <std/printf.hpp>
+#include <osl/printf.hpp>
 #include <mm/common.hpp>
-#include <std/span.hpp>
+#include <osl/span.hpp>
 #include <panic.hpp>
 
 

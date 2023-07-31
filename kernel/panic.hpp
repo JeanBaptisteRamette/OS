@@ -2,7 +2,7 @@
 #define OS_PANIC_HPP
 
 
-#include <std/string_view.hpp>
+#include <osl/string_view.hpp>
 
 
 [[noreturn]]

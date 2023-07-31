@@ -1,7 +1,7 @@
 #ifndef OS_LOCALBM_HPP
 #define OS_LOCALBM_HPP
 
-#include <std/mindef.hpp>
+#include <osl/mindef.hpp>
 
 // To avoid using too much memory for the bitmap, we can use a per-region (local) bitmap.
 // With a regular bitmap, the bitmap will keep state (used/unused) of unusable

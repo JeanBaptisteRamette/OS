@@ -1,7 +1,7 @@
-#include <std/string_view.hpp>
-#include <std/printf.hpp>
+#include <osl/string_view.hpp>
 #include <mm/memorymap.hpp>
-#include <std/span.hpp>
+#include <osl/printf.hpp>
+#include <osl/span.hpp>
 
 
 static volatile limine_memmap_request MemoryMapRequest = {

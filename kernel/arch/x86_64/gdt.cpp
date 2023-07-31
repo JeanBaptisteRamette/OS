@@ -1,6 +1,6 @@
 #include <arch/x86_64/cpu.hpp>
 #include <arch/x86_64/gdt.hpp>
-#include <std/array.hpp>
+#include <osl/array.hpp>
 
 
 

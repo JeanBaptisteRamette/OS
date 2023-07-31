@@ -1,7 +1,7 @@
 #ifndef OS_MEMORYMAP_HPP
 #define OS_MEMORYMAP_HPP
 
-#include <std/mindef.hpp>
+#include <osl/mindef.hpp>
 #include <limine.h>
 
 struct KMEMORY_MAP_INFO

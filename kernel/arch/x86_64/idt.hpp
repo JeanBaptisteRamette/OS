@@ -2,7 +2,7 @@
 #define OS_IDT_HPP
 
 
-#include <std/mindef.hpp>
+#include <osl/mindef.hpp>
 
 
 struct GATE_DESCRIPTOR

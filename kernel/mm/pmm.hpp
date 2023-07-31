@@ -1,7 +1,7 @@
 #ifndef OS_PMM_HPP
 #define OS_PMM_HPP
 
-#include <std/mindef.hpp>
+#include <osl/mindef.hpp>
 #include <limine.h>
 
 void KePmmInit();

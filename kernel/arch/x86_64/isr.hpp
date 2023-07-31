@@ -1,10 +1,10 @@
 #ifndef OS_ISR_HPP
 #define OS_ISR_HPP
 
-#include <std/string_view.hpp>
-#include <std/printf.hpp>
-#include <std/mindef.hpp>
-#include <std/array.hpp>
+#include <osl/string_view.hpp>
+#include <osl/printf.hpp>
+#include <osl/mindef.hpp>
+#include <osl/array.hpp>
 
 
 constexpr BYTE CPU_EXCEPTION_COUNT = 32;

@@ -1,7 +1,7 @@
 #include <arch/x86_64/pic.hpp>
 #include <arch/x86_64/io.hpp>
 #include <arch/x86_64/isr.hpp>
-#include <std/mindef.hpp>
+#include <osl/mindef.hpp>
 
 
 //

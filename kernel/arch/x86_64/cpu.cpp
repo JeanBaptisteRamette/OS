@@ -1,5 +1,5 @@
 #include <arch/x86_64/cpu.hpp>
-#include <std/mindef.hpp>
+#include <osl/mindef.hpp>
 
 
 void KeClearInterrupts()

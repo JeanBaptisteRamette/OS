@@ -1,5 +1,5 @@
 #include <serial.hpp>
-#include <std/printf.hpp>
+#include <osl/printf.hpp>
 #include <arch/x86_64/cpu.hpp>
 #include <arch/x86_64/gdt.hpp>
 #include <arch/x86_64/idt.hpp>

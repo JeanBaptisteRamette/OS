@@ -2,7 +2,7 @@
 #define OS_PIC_HPP
 
 
-#include <std/mindef.hpp>
+#include <osl/mindef.hpp>
 
 
 // The x86_64 architecture has a built-in PCI chip, handling IRQs from external hardware devices

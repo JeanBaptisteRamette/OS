@@ -1,8 +1,8 @@
 #ifndef OS_GDT_HPP
 #define OS_GDT_HPP
 
-#include <std/array.hpp>
-#include <std/mindef.hpp>
+#include <osl/array.hpp>
+#include <osl/mindef.hpp>
 
 //
 // Limine loads a predefined GDT for us, but on the long term for more advanced features such as TSS, UserMode, we will

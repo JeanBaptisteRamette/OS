@@ -1,5 +1,5 @@
 #include <arch/x86_64/cpu.hpp>
-#include <std/printf.hpp>
+#include <osl/printf.hpp>
 #include <panic.hpp>
 
 

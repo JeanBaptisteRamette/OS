@@ -1,5 +1,5 @@
 #include <arch/x86_64/isr.hpp>
-#include <std/printf.hpp>
+#include <osl/printf.hpp>
 
 
 #define IRQ(IntNo) (IntNo - CPU_EXCEPTION_COUNT)
