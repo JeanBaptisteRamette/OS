@@ -210,25 +210,14 @@ void BmReleasePages(QWORD Address, QWORD PageCount)
 
 void BmInit()
 {
-    const auto MemoryMap = KeGetMemoryMap();
+    KMEMORY_MAP_INFO MmInfo {};
 
-    QWORD BitmapCount = 0;
-    QWORD UsableSize  = 0;
+    if (!KeGetMemoryMapInfo(MmInfo))
+        KePanic("[BM]: KeGetMemoryMapInfo failed");
 
-    //
-    // Count the amount of bitmaps we need
-    //
-    for (const auto* Entry : osl::span(MemoryMap->entries, MemoryMap->entry_count))
-    {
-        if (Entry && Entry->type == LIMINE_MEMMAP_USABLE)
-        {
-            ++BitmapCount;
-            UsableSize += Entry->length;
-        }
-    }
-
-    const QWORD PageCount = UsableSize / PAGE_SIZE;
-    const QWORD TotalSize = BmSizeFor(PageCount);
+    const QWORD BitmapCount = MmInfo.UsableEntries;
+    const QWORD PageCount   = MmInfo.TotalAvailable / PAGE_SIZE;
+    const QWORD TotalSize   = BmSizeFor(PageCount);
 
     printf("[BM]: Found 0x%lX free pages\n", PageCount);
     printf("[BM]: Bitmap size is 0x%lX bytes (%lu KiB)\n", TotalSize, KiB(TotalSize));
