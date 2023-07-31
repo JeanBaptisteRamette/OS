@@ -90,15 +90,16 @@ static LPVOID BmEarlyAlloc(QWORD RequiredSize)
     {
         if (Entry && Entry->type == LIMINE_MEMMAP_USABLE && Entry->length >= RequiredSize)
         {
+            const auto Addr = Entry->base;
+
             // Adjust region's boundaries, so we are sure to not allocate at the same place twice
             // This also means we do not need to set the bitmap pages as used
             // As of Limine's protocol, base and length of a usable region should always be page aligned
             // The length is at least 4096 bytes, so it cannot under-flow
-
             Entry->base   += PAGE_ALIGN_UP(RequiredSize);
             Entry->length -= PAGE_ALIGN_UP(RequiredSize);
 
-            return reinterpret_cast<LPVOID>(Entry->base);
+            return reinterpret_cast<LPVOID>(Addr);
         }
     }
 
@@ -137,14 +138,25 @@ static PAGE_STATE BmGetPageState(QWORD BitIndex)
     return PAGE_STATE::Unused;
 }
 
-static void BmSetPagesState(QWORD BitIndex, QWORD PageCount, PAGE_STATE State)
+static void BmFreePages(QWORD BitIndex, QWORD PageCount)
 {
     for (auto i = 0u; i < PageCount; ++i)
     {
         const QWORD IndexByte = (BitIndex + i) >> 3;
-        const QWORD IndexBit  = (BitIndex + i) & 0b111;
+        const QWORD IndexBit = (BitIndex + i) & 0b111;
 
-        Bitmap.BmBase[IndexByte] |= (State << IndexBit);
+        Bitmap.BmBase[IndexByte] &= ~(1 << IndexBit);
+    }
+}
+
+static void BmUsePages(QWORD BitIndex, QWORD PageCount)
+{
+    for (auto i = 0u; i < PageCount; ++i)
+    {
+        const QWORD IndexByte = (BitIndex + i) >> 3;
+        const QWORD IndexBit = (BitIndex + i) & 0b111;
+
+        Bitmap.BmBase[IndexByte] |= (1 << IndexBit);
     }
 }
 
@@ -178,8 +190,10 @@ QWORD BmRequestPages(QWORD RequestedCount)
             //
             if (++UnusedPages == RequestedCount)
             {
-                BmSetPagesState(BmEntry.BitIndex, UnusedPages, PAGE_STATE::Used);
-                return BmEntry.RegionBase + (BitIndex - BmEntry.BitIndex) * PAGE_SIZE;
+                const QWORD FirstPageIndex = BitIndex - UnusedPages + 1;
+
+                BmUsePages(FirstPageIndex, RequestedCount);
+                return BmEntry.RegionBase + (FirstPageIndex - BmEntry.BitIndex) * PAGE_SIZE;
             }
         }
     }
@@ -191,7 +205,7 @@ void BmReleasePages(QWORD Address, QWORD PageCount)
 {
     const QWORD Page = BmBitIndexFromAddress(Address);
 
-    BmSetPagesState(Page, PageCount, PAGE_STATE::Unused);
+    BmFreePages(Page, PageCount);
 }
 
 void BmInit()

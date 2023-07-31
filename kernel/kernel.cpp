@@ -42,9 +42,18 @@ extern "C"
 
     KePmmInit();
 
-    const QWORD Page = KePmmRequest(1);
+    const QWORD Page1 = KePmmRequest(1);
+    const QWORD Page2 = KePmmRequest(4097);
+    const QWORD Page3 = KePmmRequest(8192);
 
-    printf("Allocated physical memory: %lX\n", Page);
+    printf("Allocated physical memory: %lX\n", Page1);
+    printf("Allocated physical memory: %lX\n", Page2);
+    printf("Allocated physical memory: %lX\n", Page3);
+
+    KePmmRelease(Page1, 4097);
+    KePmmRelease(Page2, 1);
+    KePmmRelease(Page3, 8192);
+
 
     KeHaltForever();
 }

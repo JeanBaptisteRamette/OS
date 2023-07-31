@@ -29,7 +29,7 @@ run: $(IMAGE_NAME).iso
 
 debug: $(IMAGE_NAME).iso
 	qemu-system-x86_64.exe -M q35,smm=off -m 4G -cdrom $(IMAGE_NAME).iso -boot d -d int --no-reboot --no-shutdown -s -S 2> qemu.log & sleep 1
-	gdb -ex "target remote 192.168.56.1:1234" -ex "symbol-file kernel/kernel.elf" -ex "b KernelEntry"
+	gdb -ex "target remote 192.168.1.52:1234" -ex "symbol-file kernel/kernel.elf" -ex "b KernelEntry"
 
 .PHONY: run-uefi
 run-uefi: ovmf $(IMAGE_NAME).iso
