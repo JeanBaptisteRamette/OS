@@ -35,12 +35,12 @@ SEGMENT_DESCRIPTOR GdtEncodeDescriptor(DWORD Base, DWORD Limit, WORD Flags)
 
     SEGMENT_DESCRIPTOR desc {};
 
-    desc.LoLimit    = LOWORD(Limit);             // & 0x0000FFFF
-    desc.LoBaseAddr = LOWORD(Base);              // & 0x0000FFFF
-    desc.MiBaseAddr = LOBYTE(HIWORD(Base));      // & 0x00FF0000
-    desc.HiBaseAddr = HIBYTE(HIWORD(Base));      // & 0xFF000000
-    desc.AccessBits = LOBYTE(Flags);             // & 0x00FF
-    desc.HiLimitAndFlags = static_cast<BYTE>((HIBYTE(Flags) << 4) | (LOBYTE(HIWORD(Limit)) & 0x0F));
+    desc.LoLimit    = LOWORD(Limit);      // & 0x0000FFFF
+    desc.LoBaseAddr = LOWORD(Base);       // & 0x0000FFFF
+    desc.MiBaseAddr = BYTE3(Base);        // & 0x00FF0000
+    desc.HiBaseAddr = BYTE4(Base);        // & 0xFF000000
+    desc.AccessBits = LOBYTE(Flags);      // & 0x00FF
+    desc.HiLimitAndFlags = static_cast<BYTE>((HIBYTE(Flags) << 4) | (BYTE3(Limit) & 0x0F));
 
     return desc;
 }
